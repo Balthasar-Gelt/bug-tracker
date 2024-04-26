@@ -1,4 +1,5 @@
 <h1>Simple Bug Tracker</h1>
+URL: bug-tracker.sk
 
 <h2>How to use</h2>
 
@@ -17,3 +18,4 @@
     <li>email address: email@email.com password: email123</li>
     <li> email address: email@charlemagne.fr password: charlemagne123</li>
 </ul>
+
