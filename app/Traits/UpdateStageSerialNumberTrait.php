@@ -4,27 +4,18 @@ namespace App\Traits;
 
 use App\Models\Stage;
 
-trait UpdateStageSerialNumberTrait{
+trait UpdateStageSerialNumberTrait
+{
+    public function updatePosition(int $elId, int $siblingId): array
+    {
+        $elStage = Stage::find($elId);
+        $siblingStage = Stage::find($siblingId);
 
-    public function updatePosition(int $projectId, Stage $stage, string $operator){
+        $tempSerialNum = $elStage->serial_number;
 
-        $val = null;
+        $elStage->update(['serial_number' => $siblingStage->serial_number]);
+        $siblingStage->update(['serial_number' => $tempSerialNum]);
 
-        if($operator == 'down')
-            $val = Stage::where('project_id', $projectId)->where('serial_number', '<', $stage->serial_number)
-                ->orderByDesc('serial_number')
-                ->first();
-
-        else if($operator == 'up')
-            $val = Stage::where('project_id', $projectId)->where('serial_number', '>', $stage->serial_number)
-                ->orderBy('serial_number')
-                ->first();
-
-        if($val != null){
-
-            $help = $stage->serial_number;
-            $stage->update(['serial_number' => $val->serial_number]);
-            $val->update(['serial_number' => $help]);
-        }
+        return [$elStage, $siblingStage];
     }
 }

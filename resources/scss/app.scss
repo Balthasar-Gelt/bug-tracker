@@ -1,7 +1,106 @@
 @import "~bulma/bulma.sass";
+@import "~dragula/dist/dragula.min.css";
 
-body{
-    height: 100vh;
-    overflow-y: scroll;
+html {
+    overflow-y: auto !important;
+}
+
+body {
+    // height: 100vh;
+    overflow-y: auto;
     background-color: rgb(252, 252, 252);
+}
+
+#navbar-main{
+    overflow: visible !important;
+}
+
+#app {
+    height: 100%;
+    width: 100%;
+}
+
+#log-in-form {
+    margin-top: 10vh;
+}
+
+.button.is-lighter {
+    background-color: hsl(0, 0%, 92%);
+    border-color: transparent;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.button.is-lighter:hover,
+.button.is-light.is-hovered {
+    background-color: hsl(0, 0%, 89%);
+    border-color: transparent;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.avatar {
+    object-fit: cover !important;
+    border-radius: 50%;
+}
+
+.avatar.is-28x28 {
+    width: 28px !important;
+    height: 28px !important;
+}
+
+.avatar.is-128x128 img {
+    width: 128px !important;
+    height: 128px !important;
+    object-fit: cover !important;
+}
+
+.notification.is-success {
+    position: absolute !important;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    min-width: 250px;
+    z-index: 99999;
+}
+
+.is-display-none {
+    display: none;
+}
+
+#notification {
+    transition: opacity 400ms;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+.pl-2-5 {
+    padding-left: 2.5rem !important;
+}
+
+.is-size-7-5 {
+    font-size: .95rem !important;
+}
+
+.cursor-is-text:hover {
+    cursor: text !important;
+}
+
+.cursor-is-pointer:hover {
+    cursor: pointer !important;
+}
+
+.project-description {
+    padding: 1.33rem;
+    border: 1px solid rgb(223, 223, 223);
+    border-radius: .33rem;
+}
+
+.has-default-height{
+    min-height: 100px;
+}
+
+.is-cursor-pointer{
+    cursor: pointer;
 }

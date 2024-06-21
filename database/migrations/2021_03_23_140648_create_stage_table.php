@@ -16,6 +16,7 @@ class CreateStageTable extends Migration
         Schema::create('stages', function (Blueprint $table) {
             $table->id();
             $table->string('name', 50);
+            $table->integer('serial_number')->default(0);
             $table->foreignId('project_id')->constrained()->onDelete('cascade');
         });
     }

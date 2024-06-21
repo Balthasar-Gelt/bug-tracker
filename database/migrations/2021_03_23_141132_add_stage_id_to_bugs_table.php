@@ -27,7 +27,7 @@ class AddStageIdToBugsTable extends Migration
     public function down()
     {
         Schema::table('bugs', function (Blueprint $table) {
-            $table->dropForeign('stage_id');
+            $table->dropForeign(['stage_id']);
             $table->dropColumn('stage_id');
         });
     }

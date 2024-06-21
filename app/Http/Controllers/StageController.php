@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StageRequest;
+use App\Models\Priority;
 use App\Models\Project;
 use Inertia\Inertia;
 use App\Models\Stage;
@@ -18,18 +19,21 @@ class StageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($projectId)
+    public function index(Project $project)
     {
-        $stages = Stage::where('project_id', $projectId)
-            ->with(['bugs.priority', 'project'])
-            ->orderBy('serial_number')
+        $stages = Stage::where('project_id', $project->id)
+            ->with(['bugs' => function ($query) {
+                $query->orderBy('sort', 'asc');
+            }, 'bugs.priority', 'project'])
+            ->orderBy('id')
             ->get();
-
-        $project = Project::findOrFail($projectId);
 
         return Inertia::render('Stage/Index', [
             'stages' => $stages,
-            'project' => $project,
+            'project' => Project::where('id', $project->id)->with(['users' => function ($query) {
+                $query->select('id', 'name', 'email');
+            }])->first()->toArray(),
+            'priorities' => Priority::all(),
         ]);
     }
 
@@ -38,10 +42,10 @@ class StageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($projectId)
+    public function create(Project $project)
     {
         return Inertia::render('Stage/Create', [
-            'project' => $projectId,
+            'project' => $project,
         ]);
     }
 
@@ -51,16 +55,15 @@ class StageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StageRequest $request, $projectId)
+    public function store(StageRequest $request, Project $project)
     {
         Stage::create(
             $request->validated() + [
-                'project_id' => $projectId,
-                'serial_number' => $this->setDefaultValue($projectId),
+                'project_id' => $project->id,
             ],
         );
 
-        return Redirect::route('projects.stages.index', $projectId);
+        return Redirect::back()->with('message', 'Stage created successfully');
     }
 
     /**
@@ -70,11 +73,11 @@ class StageController extends Controller
      * @param  \App\Models\Phase  $phase
      * @return \Illuminate\Http\Response
      */
-    public function update(StageRequest $request, $projectId , Stage $stage)
+    public function update(StageRequest $request, Project $project, Stage $stage)
     {
         $stage->update($request->validated());
 
-        return Redirect::back();
+        return Redirect::back()->with('message', 'Stage updated successfully');;
     }
 
     /**
@@ -83,10 +86,10 @@ class StageController extends Controller
      * @param  \App\Models\Phase  $phase
      * @return \Illuminate\Http\Response
      */
-    public function destroy($projectId, Stage $stage)
+    public function destroy(Project $project, Stage $stage)
     {
         $stage->delete();
 
-        return Redirect::back();
+        return Redirect::back()->with('message', 'Stage deleted successfully');;
     }
 }

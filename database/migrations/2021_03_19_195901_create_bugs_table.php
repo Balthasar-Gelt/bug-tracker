@@ -16,8 +16,14 @@ class CreateBugsTable extends Migration
         Schema::create('bugs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->mediumText('description');
+            $table->string('short_description', 100);
+            $table->text('description');
+            $table->boolean('is_resolved')->default(0);
             $table->foreignId('project_id')->constrained()->onDelete('cascade');
+            $table->bigInteger('created_by')->unsigned();
+            $table->bigInteger('asignee')->nullable()->unsigned();
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('assignee')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -28,6 +34,13 @@ class CreateBugsTable extends Migration
      */
     public function down()
     {
+        Schema::table('bugs', function (Blueprint $table) {
+            $table->dropForeign(['created_by']);
+            $table->dropColumn('created_by');
+            $table->dropForeign(['asignee']);
+            $table->dropColumn('asignee');
+        });
+
         Schema::dropIfExists('bugs');
     }
 }

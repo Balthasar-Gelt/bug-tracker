@@ -25,8 +25,12 @@ class BugRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
+            'short_description' => 'required|string|max:100',
             'description' => 'required|string',
+            'assignee' => 'nullable|exists:App\Models\User,id',
             'priority_id' => 'required|exists:App\Models\Priority,id',
+            'project_id' => 'required|exists:App\Models\Project,id',
+            'stage_id' => 'required|exists:App\Models\Stage,id'
         ];
     }
 }

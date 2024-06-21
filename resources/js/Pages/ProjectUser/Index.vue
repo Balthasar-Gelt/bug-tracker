@@ -1,37 +1,28 @@
 <template>
     <form @submit.prevent="submit">
 
-        <h3 class="title is-3">{{project.name}} Users</h3>
-    
-        <ul class="mt-6 mb-6">
-            <li v-for="user in projectUsers" :key="user.id" :value="user.id">
-                <ul class="columns">
-                    <li class="column">{{user.name}}</li>
-                    <li class="column">{{user.email}}</li>
-                    <li class="column link" v-if="auth.user.id == project.created_by" >
-                        <inertia-link class="has-text-danger" method="delete" :href="route('projects.project-user.destroy', {project: project, project_user: user})">
-                            Remove
-                        </inertia-link>
-                    </li>
-                </ul>
-            </li>
-        </ul>
+        <h3 class="title is-3">Users of project</h3>
+        <h4 class="title is-4 has-text-grey-dark">{{ project.name }}</h4>
 
-        <template v-if="auth.user.id == project.created_by">
+        <data-table :project="project" :headers="['', 'Name', 'Email', 'Assigned bugs', 'Resolved bugs']"
+            :dataColumns="['icon', 'name', 'email', 'assigned_bugs', 'resolved_bugs']"
+            :dataUrlString="'projects.users'" />
+
+        <template v-if="auth.user.id == project.created_by.id">
 
             <div class="field">
                 <breeze-validation-errors class="has-text-danger" />
             </div>
 
-            <div class="field">
-                <label class="label">User</label>
+            <!-- <div class="field">
+                <label class="label">Invite a user to the project</label>
                 <div class="select">
                     <select v-model="form.user_id">
                         <option disabled>Select User</option>
-                        <option v-for="user in users" :key="user.id" :value="user.id">{{user.name}}</option>
+                        <option v-for="user in users" :key="user.id" :value="user.id">{{ user.name }}</option>
                     </select>
                 </div>
-            </div>
+            </div> -->
 
             <div class="control mt-5">
                 <button class="button is-primary" :disabled="form.processing">Invite</button>
@@ -44,33 +35,42 @@
 
 <script>
 
-    import Layout from '@/Layouts/Authenticated.vue';
-    import breezeValidationErrors from '@/Components/ValidationErrors.vue';
+import Layout from '@/Layouts/Authenticated.vue';
+import breezeValidationErrors from '@/Components/ValidationErrors.vue';
+import DataTable from '../../Components/DataTable.vue';
 
-    export default {
-        props:['project', 'users', 'projectUsers', 'auth'],
-        layout: Layout,
-        components: {
-             breezeValidationErrors
-        },
-        data() {
-            return {
-                form: this.$inertia.form({
-                    user_id: '',
-                })
+export default {
+    props: ['project', 'users', 'auth'],
+    layout: Layout,
+    components: {
+        breezeValidationErrors,
+        DataTable,
+    },
+    data() {
+        return {
+            form: this.$inertia.form({
+                user_id: '',
+            })
+        }
+    },
+    methods: {
+        submit() {
+            if (!this.form.user_id) {
+                return;
             }
+
+            this.form.post(this.route('projects.project-user.store', this.project))
         },
-        methods: {
-            submit() {
-                this.form.post(this.route('projects.project-user.store', this.project))
-            }
+        deleteConfirm() {
+            return confirm('Are you sure you want to delete the project?');
         }
     }
+}
 
 </script>
 
 <style scoped>
-    .link{
-        text-align: right;
-    }
+.link {
+    text-align: right;
+}
 </style>

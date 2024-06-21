@@ -11,29 +11,44 @@
             <div class="field">
                 <label class="label">Name</label>
                 <div class="control">
-                    <input class="input" type="text" placeholder="Name" v-model="form.name" required autofocus autocomplete="name" id="name">
+                    <input class="input" type="text" placeholder="Name" v-model="form.name" required autofocus
+                        autocomplete="name" id="name">
                 </div>
             </div>
 
             <div class="field">
                 <label class="label">Email</label>
                 <div class="control">
-                    <input class="input" type="email" placeholder="Email address" v-model="form.email" required autocomplete="email" id="email">
+                    <input class="input" type="email" placeholder="Email address" v-model="form.email" required
+                        autocomplete="email" id="email">
                 </div>
             </div>
 
             <div class="field">
                 <label class="label">Password</label>
                 <div class="control">
-                    <input class="input" type="password" placeholder="Password" v-model="form.password" required autocomplete="new-password" id="password">
+                    <input class="input" type="password" placeholder="Password" v-model="form.password" required
+                        autocomplete="new-password" id="password">
                 </div>
             </div>
 
             <div class="field">
                 <label class="label">Confirm Password</label>
                 <div class="control">
-                    <input class="input" type="password" placeholder="Password" v-model="form.password_confirmation" required autocomplete="new-password" id="password_confirmation">
+                    <input class="input" type="password" placeholder="Password" v-model="form.password_confirmation"
+                        required autocomplete="new-password" id="password_confirmation">
                 </div>
+            </div>
+
+            <div id="file-js" class="field file has-name">
+                <label class="file-label">
+                    <input @change="changeFileText" @input="form.icon = $event.target.files[0]" class="file-input"
+                        type="file" />
+                    <span class="file-cta">
+                        <span class="file-label"> Choose icon file… </span>
+                    </span>
+                    <span class="file-name"> No file uploaded </span>
+                </label>
             </div>
 
             <div class="field">
@@ -50,34 +65,43 @@
 </template>
 
 <script>
-    import BreezeGuestLayout from "@/Layouts/Guest"
-    import BreezeValidationErrors from '@/Components/ValidationErrors'
+import BreezeGuestLayout from "@/Layouts/Guest"
+import BreezeValidationErrors from '@/Components/ValidationErrors'
 
-    export default {
-        layout: BreezeGuestLayout,
+export default {
+    layout: BreezeGuestLayout,
 
-        components: {
-            BreezeValidationErrors,
+    components: {
+        BreezeValidationErrors,
+    },
+
+    data() {
+        return {
+            form: this.$inertia.form({
+                name: '',
+                email: '',
+                password: '',
+                password_confirmation: '',
+                icon: null,
+                terms: false,
+            })
+        }
+    },
+
+    methods: {
+        submit() {
+            this.form.post(this.route('register'), {
+                onFinish: () => this.form.reset('password', 'password_confirmation'),
+            })
         },
+        changeFileText() {
+            const fileInput = document.querySelector("#file-js input[type=file]");
 
-        data() {
-            return {
-                form: this.$inertia.form({
-                    name: '',
-                    email: '',
-                    password: '',
-                    password_confirmation: '',
-                    terms: false,
-                })
-            }
-        },
-
-        methods: {
-            submit() {
-                this.form.post(this.route('register'), {
-                    onFinish: () => this.form.reset('password', 'password_confirmation'),
-                })
+            if (fileInput.files.length > 0) {
+                const fileName = document.querySelector("#file-js .file-name");
+                fileName.textContent = fileInput.files[0].name;
             }
         }
     }
+}
 </script>

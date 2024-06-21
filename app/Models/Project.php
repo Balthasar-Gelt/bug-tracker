@@ -10,25 +10,25 @@ class Project extends Model
     use HasFactory;
 
     public $timestamps = false;
-    protected $fillable = ['name', 'description', 'created_by'];
+    protected $fillable = ['name', 'short_description', 'description', 'created_by'];
 
-    public function manager(){
-
-        return $this->belongsTo(User::class, 'created_by');
+    public function getCreatedByAttribute($value)
+    {
+        return User::find($value);
     }
 
-    public function stages(){
-
+    public function stages()
+    {
         return $this->hasMany(Stage::class);
     }
 
-    public function bugs(){
-
+    public function bugs()
+    {
         return $this->hasMany(Bug::class);
     }
 
-    public function users(){
-
+    public function users()
+    {
         return $this->belongsToMany(User::class);
     }
 }

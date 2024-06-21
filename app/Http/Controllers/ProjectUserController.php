@@ -6,6 +6,7 @@ use App\Http\Requests\ProjectUserRequest;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class ProjectUserController extends Controller
@@ -15,14 +16,11 @@ class ProjectUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($projectId)
+    public function index(Project $project)
     {
-        $project = Project::findOrFail($projectId);
-
         return Inertia::render('ProjectUser/Index', [
-            'users' => User::all(),
+            'users' => User::all()->except([Auth::user()->id]),
             'project' => $project,
-            'projectUsers' => $project->users,
         ]);
     }
 
@@ -32,13 +30,11 @@ class ProjectUserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProjectUserRequest $request,  $projectId)
+    public function store(ProjectUserRequest $request, Project $project)
     {
-        $project = Project::findOrFail($projectId);
-
         $request->validated();
 
-        $project->users()->sync(array($request->all() + ['project_id' => $projectId]), false);
+        $project->users()->sync(array($request->all() + ['project_id' => $project->id]), false);
 
         return Redirect::back();
     }
@@ -49,11 +45,11 @@ class ProjectUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($projectId, $projectUserId)
+    public function destroy(Project $project, $projectUserId)
     {
-        $project = Project::findOrFail($projectId);
-
-        $project->users()->detach($projectUserId);
+        if ($project->created_by->id != $projectUserId) {
+            $project->users()->detach($projectUserId);
+        }
 
         return Redirect::back();
     }

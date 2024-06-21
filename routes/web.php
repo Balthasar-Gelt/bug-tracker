@@ -6,10 +6,7 @@ use App\Http\Controllers\BugController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StageController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\BugStageController;
 use App\Http\Controllers\ProjectUserController;
-use App\Http\Controllers\StageSerialNumberController;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,15 +19,21 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
-Route::resource('projects', ProjectController::class)->middleware('auth');
+Route::middleware(['auth'])->group(function () {
+    Route::get('user/settings', [UserController::class, 'edit'])->name('user.settings');
+    Route::patch('user', [UserController::class, 'update'])->name('user.update');
+
+    Route::resource('projects', ProjectController::class);
+});
 
 Route::middleware(['auth', 'userProjects'])->group(function () {
-
     Route::resource('projects.project-user', ProjectUserController::class);
     Route::resource('projects.stages', StageController::class);
-    Route::resource('projects.stages-serial-number', StageSerialNumberController::class);
     Route::resource('projects.stages.bugs', BugController::class);
-    Route::resource('projects.stages.bug-stage', BugStageController::class);
+
+    Route::get('projects/{project}/users', [ProjectController::class, 'users'])->name('projects.users');
+    Route::get('projects/{project}/bugs', [ProjectController::class, 'bugs'])->name('projects.bugs');
+    Route::patch('projects/{project}/stages/{stage}/bugs/{bug}/update-position', [BugController::class, 'updatePosition'])->name('updatePosition');
 });

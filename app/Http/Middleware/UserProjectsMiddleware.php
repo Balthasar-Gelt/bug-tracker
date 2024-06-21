@@ -18,8 +18,9 @@ class UserProjectsMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!(Auth::user()->projects->contains($request->project)))
+        if(!(Auth::user()->projects->contains($request->project))) {
             abort(404);
+        }
 
         return $next($request);
     }

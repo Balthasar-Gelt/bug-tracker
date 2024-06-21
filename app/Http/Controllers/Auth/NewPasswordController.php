@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Redirect;
 
 class NewPasswordController extends Controller
 {
@@ -21,8 +23,7 @@ class NewPasswordController extends Controller
     public function create(Request $request)
     {
         return Inertia::render('Auth/ResetPassword', [
-            'email' => $request->email,
-            'token' => $request->route('token'),
+            'email' => Auth::user()->email,
         ]);
     }
 
@@ -37,7 +38,6 @@ class NewPasswordController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'token' => 'required',
             'email' => 'required|email',
             'password' => 'required|string|confirmed|min:8',
         ]);
@@ -46,7 +46,7 @@ class NewPasswordController extends Controller
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.
         $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
+            array_merge($request->only('email', 'password', 'password_confirmation'), ['token' => app('auth.password.broker')->createToken(Auth::user())]),
             function ($user) use ($request) {
                 $user->forceFill([
                     'password' => Hash::make($request->password),
@@ -61,7 +61,7 @@ class NewPasswordController extends Controller
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
         if ($status == Password::PASSWORD_RESET) {
-            return redirect()->route('login')->with('status', __($status));
+            return Redirect::route('user.settings')->with('message', 'Password was changed successfully');
         }
 
         throw ValidationException::withMessages([

@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -18,6 +18,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'icon',
+        'icon_mime',
         'email',
         'password',
     ];
@@ -41,8 +43,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function projects(){
-
+    public function projects()
+    {
         return $this->belongsToMany(Project::class);
+    }
+
+    public function bugs()
+    {
+        return $this->hasMany(Bug::class, 'assignee');
+    }
+
+    public function getIconAttribute()
+    {
+        return "data:" . $this->attributes['icon_mime'] . ";charset=utf8;base64," . base64_encode($this->attributes['icon']);
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a5ce9628e70d73d3c19cd2dfd02e9577",
+    "content-hash": "4548108d62e651a7c2c417b79ec54714",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1752,6 +1752,54 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v4.10.4"
             },
             "time": "2020-12-20T10:01:03+00:00"
+        },
+        {
+            "name": "ninoman/laravel-sortable",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ninoman/laravel-sortable.git",
+                "reference": "fe81a20b6022d15c34dbef3f4f3e11aea93061bd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ninoman/laravel-sortable/zipball/fe81a20b6022d15c34dbef3f4f3e11aea93061bd",
+                "reference": "fe81a20b6022d15c34dbef3f4f3e11aea93061bd",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": ">=5.5",
+                "php": ">=7.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ninoman\\LaravelSortable\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arman Ninoyan",
+                    "email": "arm.ninoyan@gmail.com"
+                }
+            ],
+            "description": "Simple package to add sorting functionality to your Laravel models.",
+            "keywords": [
+                "database",
+                "laravel",
+                "ordering",
+                "sorting"
+            ],
+            "support": {
+                "issues": "https://github.com/ninoman/laravel-sortable/issues",
+                "source": "https://github.com/ninoman/laravel-sortable/tree/master"
+            },
+            "time": "2019-06-09T12:05:58+00:00"
         },
         {
             "name": "opis/closure",
@@ -7613,5 +7661,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.6.0"
 }

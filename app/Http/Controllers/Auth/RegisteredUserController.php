@@ -35,12 +35,15 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'icon' => 'nullable|image|max:2048',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
         ]);
 
         Auth::login($user = User::create([
             'name' => $request->name,
+            'icon' => $request->icon === null ? null : file_get_contents($request->icon),
+            'icon_mime' => $request->icon === null ? null : $request->icon->getMimeType(),
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]));

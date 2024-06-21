@@ -27,7 +27,7 @@ class AddCreatedByColumnToProjecgts extends Migration
     public function down()
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->dropForeign('created_by');
+            $table->dropForeign(['created_by']);
             $table->dropColumn('created_by');
         });
     }

@@ -12,7 +12,7 @@
     export default {
         computed: {
             errors() {
-                return this.$page.props.errors
+                return this.$page.props.errors;
             },
 
             hasErrors() {

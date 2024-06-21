@@ -26,7 +26,7 @@ class AddPriorityIdToBugsTable extends Migration
     public function down()
     {
         Schema::table('bugs', function (Blueprint $table) {
-            $table->dropForeign('priority_id');
+            $table->dropForeign(['priority_id']);
             $table->dropColumn('priority_id');
         });
     }

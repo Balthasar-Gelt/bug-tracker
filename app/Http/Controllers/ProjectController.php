@@ -22,12 +22,10 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Auth::user()->projects()
-                        ->withCount(['bugs', 'users'])
-                        ->get();
-
         return Inertia::render('Project/Index', [
-            'projects' => $projects,
+            'projects' => Auth::user()->projects()
+                ->withCount(['bugs', 'users'])
+                ->get()->toArray(),
         ]);
     }
 
@@ -55,7 +53,7 @@ class ProjectController extends Controller
 
         $project->users()->attach(Auth::user()->id);
 
-        return Redirect::route('projects.index');
+        return Redirect::route('projects.index')->with('message', 'Project successfully created');
     }
 
     /**
@@ -69,6 +67,25 @@ class ProjectController extends Controller
         return Inertia::render('Project/Show', [
             'project' => $project,
         ]);
+    }
+
+    public function users(Project $project)
+    {
+        return $project->users()->withCount([
+            'bugs as assigned_bugs' => function ($query) use ($project) {
+                $query->where('is_resolved', 0)->where('project_id', $project->id);
+            }, 'bugs as resolved_bugs' => function ($query) use ($project) {
+                $query->where('is_resolved', 1)->where('project_id', $project->id);
+            }
+        ])
+            ->orderBy('name', 'asc')
+            ->paginate(10);
+    }
+
+    public function bugs(Project $project)
+    {
+        return $project->bugs()->with('priority')->orderBy('name', 'asc')
+            ->paginate(10);
     }
 
     /**
@@ -95,7 +112,7 @@ class ProjectController extends Controller
     {
         $project->update($request->validated());
 
-        return Redirect::route('projects.index');
+        return Redirect::route('projects.index')->with('message', 'Project updated successfully');
     }
 
     /**
@@ -108,6 +125,6 @@ class ProjectController extends Controller
     {
         $project->delete();
 
-        return Redirect::route('projects.index');
+        return Redirect::back()->with('message', 'Project deleted successfully');;
     }
 }

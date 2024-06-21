@@ -10,7 +10,7 @@ class Stage extends Model
     use HasFactory;
 
     public $timestamps = false;
-    protected $fillable = ['name', 'project_id', 'serial_number'];
+    protected $fillable = ['name', 'project_id', 'serial_number', 'is_final'];
 
     public function project(){
 

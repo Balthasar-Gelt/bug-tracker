@@ -1,6 +1,6 @@
 <template>
     <div class="section">
-        <div class="container is-max-desktop">
+        <div class="container is-fullhd">
             <slot/>
         </div>
     </div>

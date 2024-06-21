@@ -16,6 +16,7 @@
         "laravel/framework": "^8.12",
         "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.5",
+        "ninoman/laravel-sortable": "dev-master",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {

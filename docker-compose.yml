@@ -1,5 +1,4 @@
 # For more information: https://laravel.com/docs/sail
-version: '3'
 services:
     laravel.test:
         build:
@@ -26,7 +25,6 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
             MYSQL_DATABASE: '${DB_DATABASE}'
-            MYSQL_USER: '${DB_USERNAME}'
             MYSQL_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
         volumes:
