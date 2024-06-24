@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="notification" class="is-invisible fade-out box notification is-success">
+        <div ref="notification" id="notification" class="is-invisible fade-out box notification is-success">
             <a @click="hideNotification" class="delete is-small"></a>
             <span id="notification-text"></span>
         </div>
@@ -60,15 +60,11 @@ let opacityTimeout = null;
 let visibilityTimeout = null;
 
 Inertia.on('finish', (event) => {
-
     if (!usePage().props.value.message) {
         return;
     }
 
-    notification ??= document.getElementById('notification');
-
     if (notification) {
-
         [opacityTimeout, visibilityTimeout].forEach(timeout => {
             if (timeout) {
                 clearTimeout(timeout);
@@ -90,6 +86,8 @@ Inertia.on('finish', (event) => {
 
 export default {
     mounted() {
+        notification = document.getElementById('notification');
+
         document.addEventListener('DOMContentLoaded', () => {
 
             // Get all "navbar-burger" elements
@@ -102,7 +100,6 @@ export default {
                     // Get the target from the "data-target" attribute
                     const target = el.dataset.target;
                     const $target = document.getElementById(target);
-                    console.log($target);
                     // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
                     el.classList.toggle('is-active');
                     $target.classList.toggle('is-active');
@@ -114,10 +111,7 @@ export default {
     },
     methods: {
         hideNotification() {
-            notification ??= document.getElementById('notification');
-
             if (notification) {
-
                 [opacityTimeout, visibilityTimeout].forEach(timeout => {
                     if (timeout) {
                         clearTimeout(timeout);
