@@ -33,7 +33,7 @@
         <div class="navbar is-fixed-bottom container">
             <div class="section pl-2-5 pt-2 pb-2">
                 <a class="mr-5 button is-primary" @click="openForm('bug', 'add')"
-                    v-if="auth.user.id == project.created_by.id">
+                    v-if="auth.user.id == project.created_by.id && stages.length > 0">
                     New Bug
                 </a>
 

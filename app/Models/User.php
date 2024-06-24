@@ -55,6 +55,10 @@ class User extends Authenticatable
 
     public function getIconAttribute()
     {
+        if (!$this->attributes['icon']) {
+            return "data:" . config('constants.default_user_icon_mime') . ";charset=utf8;base64," . base64_encode(config('constants.default_user_icon'));
+        }
+
         return "data:" . $this->attributes['icon_mime'] . ";charset=utf8;base64," . base64_encode($this->attributes['icon']);
     }
 }
