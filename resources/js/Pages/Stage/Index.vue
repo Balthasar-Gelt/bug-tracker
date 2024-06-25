@@ -67,20 +67,24 @@ export default {
     layout: Layout,
     props: ['stages', 'project', 'auth', 'priorities'],
     mounted() {
-        document.addEventListener('DOMContentLoaded', (e) => {
-            let drakeBugs = dragula({
-                isContainer: function (el) {
-                    return el.classList.contains('is-bug-wrapper');
-                }
-            });
+        this.drakeBugs = dragula({
+            isContainer: function (el) {
+                return el.classList.contains('is-bug-wrapper');
+            }
+        });
 
-            drakeBugs.on('drop', (el, target, source, sibling) => {
-                axios.patch(this.route('updatePosition', { project: this.project, stage: el.getAttribute('stage'), bug: el.getAttribute('bug') }), {
-                    sibling_id: sibling?.getAttribute('bug') || null,
-                    target_id: target.getAttribute('stage'),
-                });
+        this.drakeBugs.on('drop', (el, target, source, sibling) => {
+            axios.patch(this.route('updatePosition', { project: this.project, stage: el.getAttribute('stage'), bug: el.getAttribute('bug') }), {
+                sibling_id: sibling?.getAttribute('bug') || null,
+                target_id: target.getAttribute('stage'),
             });
-        })
+        });
+    },
+    beforeUnmount() {
+        if (this.drakeBugs) {
+            this.drakeBugs.destroy();
+            this.drakeBugs = null;
+        }
     },
     data() {
         return {
@@ -91,6 +95,7 @@ export default {
             showNewBugModal: false,
             showEditBugModal: false,
             editBug: null,
+            drakeBugs: null,
         }
     },
     components: {
