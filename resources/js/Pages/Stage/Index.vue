@@ -61,6 +61,7 @@ import StageAddForm from '@/Components/Stage/AddForm.vue';
 import StageEditForm from '@/Components/Stage/EditForm.vue';
 import breezeValidationErrors from '@/Components/ValidationErrors.vue';
 import dragula from 'dragula';
+import axios from 'axios';
 
 export default {
     layout: Layout,
@@ -73,10 +74,10 @@ export default {
         });
 
         drakeBugs.on('drop', (el, target, source, sibling) => {
-            this.$inertia.patch(this.route('updatePosition', { project: this.project, stage: el.getAttribute('stage'), bug: el.getAttribute('bug') }), {
+            axios.patch(this.route('updatePosition', { project: this.project, stage: el.getAttribute('stage'), bug: el.getAttribute('bug') }), {
                 sibling_id: sibling?.getAttribute('bug') || null,
                 target_id: target.getAttribute('stage'),
-            }).then()
+            }).then(res => console.log(res));
         });
     },
     data() {

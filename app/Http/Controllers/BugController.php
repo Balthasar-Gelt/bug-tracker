@@ -119,8 +119,6 @@ class BugController extends Controller
         $validated = $request->validated();
         $bugPositionManager = new BugPositionManager($bug, Bug::find($validated['sibling_id']), Stage::find($validated['target_id']));
 
-        $bugPositionManager->updateData();
-
-        return Redirect::back();
+        return response()->json(['updated' => $bugPositionManager->updateData()]);
     }
 }

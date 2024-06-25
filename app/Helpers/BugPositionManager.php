@@ -19,11 +19,11 @@ class BugPositionManager
         $this->targetStage = $targetStage;
     }
 
-    public function updateData()
+    public function updateData(): int
     {
         $this->setResolvedStatus();
         $this->updateSortOrder();
-        $this->bug->update($this->data);
+        return $this->bug->update($this->data);
     }
 
     private function setResolvedStatus()
