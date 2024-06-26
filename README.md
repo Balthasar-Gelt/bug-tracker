@@ -8,7 +8,7 @@
 <div>To see all the bugs of each individual project all you have to do is to click on the project name in the project list or the bug icon.</div>
 <div>Bugs are assigned to stages. To create a bug the project must have at least one stage. Only project owners are allowed to create bugs.</div>
 
-Accounts:
+<h3>Accounts:</h3>
 
  1. Project owners: 
 	 - email: fekete@gmail.com password: fekete123
