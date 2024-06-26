@@ -1,5 +1,8 @@
 # Bug Tracker
 **URL:** bug-tracker.sk
+&nbsp;
+<div>Built with Laravel, Vue3, Inertiajs, sass</div>
+&nbsp;
 
 <div>You can use one of the existing accounts listed below that already have pre-generated content or you can create your own account.</div>
 <div>After log in you will see the main list of all projects that the user have access to. Some projects may have green background. That means that the project has been created by the logged user. Only project owners can delete or edit the project. You can create a new project by hitting the green Add button.</div>
