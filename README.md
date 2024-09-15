@@ -1,5 +1,5 @@
 # Bug Tracker
-<h3>URL: www.bug-tracker.sk<h3>
+URL: www.bug-tracker.sk
 
 <div>Built with Laravel, Vue3, Inertiajs, sass</div>
 &nbsp;
